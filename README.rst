@@ -58,8 +58,8 @@ You can install from source with:
 
 .. code:: shell
 
-    git clone https://github.com/AlekseyKorshuk/yoomoney-api --recursive
-    cd yoomoney-api
+    git clone https://github.com/vxjnc/async-yoomoney-api.git --recursive
+    cd async-yoomoney-api
     python setup.py install
 
 ===========

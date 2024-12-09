@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 import json
 from typing import TYPE_CHECKING, Optional, List
 
@@ -8,11 +8,11 @@ from yoomoney.exceptions import InvalidToken
 
 class Account:
 
-    def __init__(self,
+    async def __init__(self,
                  base_url: str = None,
                  token: str = None,
                  method: str = None,
-
+                 session: Optional[aiohttp.ClientSession] = None
                  ):
 
         self.__private_method = method
@@ -20,7 +20,9 @@ class Account:
         self.__private_base_url = base_url
         self.__private_token = token
 
-        data = self._request()
+        self.session = session
+
+        data = await self._request()
 
         if len(data) != 0:
             self.account = data['account']
@@ -52,7 +54,7 @@ class Account:
         else:
             raise InvalidToken()
 
-    def _request(self):
+    async def _request(self) -> aiohttp.ClientResponse:
 
         access_token = str(self.__private_token)
         url = self.__private_base_url + self.__private_method
@@ -62,6 +64,10 @@ class Account:
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
-        response = requests.request("POST", url, headers=headers)
-
-        return response.json()
+        if self.session:
+            async with self.session.post(url, headers=headers) as response:
+                return await response.json()
+            
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers) as response:
+                return await response.json()

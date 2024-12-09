@@ -1,7 +1,8 @@
-import requests
+import aiohttp
+from typing import Optional
 
 class Quickpay:
-    def __init__(self,
+    async def __init__(self,
                  receiver: str,
                  quickpay_form : str,
                  targets: str,
@@ -16,6 +17,7 @@ class Quickpay:
                  need_email: bool = None,
                  need_phone: bool = None,
                  need_address: bool = None,
+                 session: Optional[aiohttp.ClientSession] = None
                  ):
         self.receiver = receiver
         self.quickpay_form = quickpay_form
@@ -32,10 +34,11 @@ class Quickpay:
         self.need_phone = need_phone
         self.need_address = need_address
 
-        self.response = self._request()
+        self.session = session
 
-    def _request(self):
+        self.response = await self._request()
 
+    async def _request(self):
         self.base_url = "https://yoomoney.ru/quickpay/confirm.xml?"
 
         payload = {}
@@ -71,7 +74,13 @@ class Quickpay:
 
         self.base_url = self.base_url[:-1].replace(" ", "%20")
 
-        response = requests.request("POST", self.base_url)
+        if self.session:
+            async with self.session.get(self.base_url) as response:
+                response = response
+        else:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.base_url) as response:
+                    response = response
 
         self.redirected_url = response.url
         return response

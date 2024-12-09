@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-import requests
+import aiohttp
 
 from yoomoney.exceptions import (
     IllegalParamOperationId,
@@ -13,18 +13,21 @@ from yoomoney.operation_details.digital_good import DigitalGood
 
 
 class OperationDetails:
-    def __init__(self,
+    async def __init__(self,
                  base_url: str,
                  token: str,
                  operation_id: str,
                  method: str = None,
+                 session: Optional[aiohttp.ClientSession] = None
                  ):
         self.__private_method = method
         self.__private_token = token
         self.__private_base_url = base_url
         self.operation_id = operation_id
 
-        data = self._request()
+        self.session = session
+
+        data = await self._request()
 
         if "error" in data:
             if data["error"] == "illegal_param_operation_id":
@@ -114,8 +117,7 @@ class OperationDetails:
                                              bonuses=bonuses
                                              )
 
-    def _request(self):
-
+    async def _request(self):
         access_token = str(self.__private_token)
         url = self.__private_base_url + self.__private_method
 
@@ -128,7 +130,10 @@ class OperationDetails:
 
         payload["operation_id"] = self.operation_id
 
+        if self.session:
+            async with self.session.post(url, headers=headers, data=payload) as response:
+                return await response.json()
 
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        return response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers, data=payload) as response:
+                return await response.json()

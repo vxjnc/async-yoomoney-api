@@ -1,5 +1,5 @@
-from typing import List
-import requests
+from typing import List, Optional
+import aiohttp
 
 from yoomoney.exceptions import (
     InvalidRequest,
@@ -9,12 +9,13 @@ from yoomoney.exceptions import (
 )
 
 class Authorize:
-    def __init__(
+    async def __init__(
             self,
             client_id: str,
             redirect_uri: str,
             client_secret: str,
-            scope: List[str]
+            scope: List[str],
+            session: Optional[aiohttp.ClientSession] = None
                   ):
 
         url = "https://yoomoney.ru/oauth/authorize?client_id={client_id}&response_type=code" \
@@ -27,9 +28,15 @@ class Authorize:
             'Content-Type': 'application/x-www-form-urlencoded'
         }
 
-        response = requests.request("POST", url, headers=headers)
+        if session:
+            async with session.post(url, headers=headers) as response:
+                response = response
+        else:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers) as response:
+                    response = response
 
-        if response.status_code == 200:
+        if response.status == 200:
             print("Visit this website and confirm the application authorization request:")
             print(response.url)
 
@@ -41,10 +48,19 @@ class Authorize:
 
         url = "https://yoomoney.ru/oauth/token?code={code}&client_id={client_id}&" \
               "grant_type=authorization_code&redirect_uri={redirect_uri}&client_secret={client_secret}".format(code=str(code), client_id=client_id, redirect_uri=redirect_uri, client_secret=client_secret )
-        response = requests.request("POST", url, headers=headers)
+        
+        if session:
+            async with session.post(url, headers=headers) as response:
+                response = response
+        else:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers) as response:
+                    response = response
 
-        if "error" in response.json():
-            error = response.json()["error"]
+        response_json = await response.json()
+
+        if "error" in response_json:
+            error = response_json["error"]
             if error == "invalid_request":
                 raise InvalidRequest()
             elif error == "unauthorized_client":
@@ -52,8 +68,8 @@ class Authorize:
             elif error == "invalid_grant":
                 raise InvalidGrant()
 
-        if response.json()['access_token'] == "":
+        if response_json['access_token'] == "":
             raise EmptyToken()
 
         print("Your access token:")
-        print(response.json()['access_token'])
+        print(response_json['access_token'])

@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-import requests
+import aiohttp
 import json
 
 from yoomoney.operation.operation import Operation
@@ -17,7 +17,7 @@ from yoomoney.exceptions import (
 
 
 class History:
-    def __init__(self,
+    async def __init__(self,
                  base_url: str = None,
                  token: str = None,
                  method: str = None,
@@ -28,12 +28,15 @@ class History:
                  start_record: str = None,
                  records: int = None,
                  details: bool = None,
+                 session: Optional[aiohttp.ClientSession] = None
                  ):
 
         self.__private_method = method
 
         self.__private_base_url = base_url
         self.__private_token = token
+
+        self.session = session
 
         self.type = type
         self.label = label
@@ -69,7 +72,7 @@ class History:
         self.records = records
         self.details = details
 
-        data = self._request()
+        data = await self._request()
 
         if "error" in data:
             if data["error"] == "illegal_param_type":
@@ -148,7 +151,7 @@ class History:
 
 
 
-    def _request(self):
+    async def _request(self):
 
         access_token = str(self.__private_token)
         url = self.__private_base_url + self.__private_method
@@ -174,6 +177,10 @@ class History:
         if self.details is not None:
             payload["details"] = self.details
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        if self.session:
+            async with self.session.post(url, headers=headers, data=payload) as response:
+                return await response.json()
 
-        return response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers, data=payload) as response:
+                return await response.json()

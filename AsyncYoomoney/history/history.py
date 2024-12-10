@@ -3,9 +3,9 @@ from typing import Optional
 import aiohttp
 import json
 
-from yoomoney.operation.operation import Operation
+from AsyncYoomoney.operation.operation import Operation
 
-from yoomoney.exceptions import (
+from AsyncYoomoney.exceptions import (
     IllegalParamType,
     IllegalParamStartRecord,
     IllegalParamRecords,

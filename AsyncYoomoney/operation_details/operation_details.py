@@ -2,14 +2,14 @@ from datetime import datetime
 from typing import Optional, List
 import aiohttp
 
-from yoomoney.exceptions import (
+from AsyncYoomoney.exceptions import (
     IllegalParamOperationId,
     TechnicalError
     )
 
-from yoomoney.operation_details.digital_product import DigitalProduct
-from yoomoney.operation_details.digital_bonus import DigitalBonus
-from yoomoney.operation_details.digital_good import DigitalGood
+from AsyncYoomoney.operation_details.digital_product import DigitalProduct
+from AsyncYoomoney.operation_details.digital_bonus import DigitalBonus
+from AsyncYoomoney.operation_details.digital_good import DigitalGood
 
 
 class OperationDetails:

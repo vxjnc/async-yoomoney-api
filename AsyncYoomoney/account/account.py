@@ -2,9 +2,9 @@ import aiohttp
 import json
 from typing import TYPE_CHECKING, List
 
-from yoomoney.account.balance_details import BalanceDetails
-from yoomoney.account.card import Card
-from yoomoney.exceptions import InvalidToken
+from AsyncYoomoney.account.balance_details import BalanceDetails
+from AsyncYoomoney.account.card import Card
+from AsyncYoomoney.exceptions import InvalidToken
 
 class Account:
 

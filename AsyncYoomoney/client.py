@@ -2,7 +2,7 @@ import json
 from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Union
 from datetime import datetime
 
-from yoomoney import (
+from AsyncYoomoney import (
     Account,
     History,
     OperationDetails,

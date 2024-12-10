@@ -1,7 +1,7 @@
 from typing import List
 import aiohttp
 
-from yoomoney.exceptions import (
+from AsyncYoomoney.exceptions import (
     InvalidRequest,
     UnauthorizedClient,
     InvalidGrant,

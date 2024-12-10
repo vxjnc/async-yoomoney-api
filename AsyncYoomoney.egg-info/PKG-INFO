@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: AsyncYoomoney
+Version: 0.1.1
+Summary: Unofficial YooMoney API python library
+Home-page: https://github.com/vxjnc/async-yoomoney-api.git
+Author: vxjnc
+Author-email: vxjnc0@gmail.com
+License: GPL-3.0
+License-File: LICENSE
+
 API Yoomoney - unofficial python library
 ==================================================
 
@@ -51,7 +61,7 @@ You can install with:
 
 .. code:: shell
 
-    pip install AsyncYoomoney --upgrade
+    pip install yoomoney --upgrade
 
 
 You can install from source with:
@@ -199,7 +209,7 @@ Output:
     Operation: 670278348725002105
     Status     --> success
     Datetime   --> 2021-10-10 10:10:10
-    Title      --> Пополнение с карты ****4487
+    Title      --> РџРѕРїРѕР»РЅРµРЅРёРµ СЃ РєР°СЂС‚С‹ ****4487
     Pattern id --> None
     Direction  --> in
     Amount     --> 100500.0
@@ -209,7 +219,7 @@ Output:
     Operation: 670244335488002313
     Status     --> success
     Datetime   --> 2021-10-10 10:10:10
-    Title      --> Перевод от 410019014512803
+    Title      --> РџРµСЂРµРІРѕРґ РѕС‚ 410019014512803
     Pattern id --> p2p
     Direction  --> in
     Amount     --> 100500.0
@@ -254,7 +264,7 @@ Output:
     amount_due       --> None
     fee              --> None
     datetime         --> 2021-10-10 10:10:10
-    title            --> Перевод от 410019014512803
+    title            --> РџРµСЂРµРІРѕРґ РѕС‚ 410019014512803
     sender           --> 410019014512803
     recipient        --> None
     recipient_type   --> None

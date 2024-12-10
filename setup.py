@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages, Extension
 
 setup(
-    name='YooMoney',
+    name='AsyncYoomoney',
     version='0.1.1',
     packages=find_packages(exclude=['tests']),
     url='https://github.com/vxjnc/async-yoomoney-api.git',

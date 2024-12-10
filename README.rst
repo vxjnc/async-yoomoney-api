@@ -82,20 +82,21 @@ First of all we need to receive an access token.
 
 .. code:: python
 
-    from yoomoney import Authorize
+      import asyncio
+      from AsyncYoomoney import Authorize
 
-    Authorize(
-          client_id="YOUR_CLIENT_ID",
-          redirect_uri="YOUR_REDIRECT_URI",
-          client_secret="YOUR_CLIENT_SECRET",
-          scope=["account-info",
-                 "operation-history",
-                 "operation-details",
-                 "incoming-transfers",
-                 "payment-p2p",
-                 "payment-shop",
-                 ]
-          )
+      asyncio.run(Authorize.create(
+            client_id="YOUR_CLIENT_ID",
+            redirect_uri="YOUR_REDIRECT_URI",
+            client_secret="YOUR_CLIENT_SECRET",
+            scope=["account-info",
+            "operation-history",
+            "operation-details",
+            "incoming-transfers",
+            "payment-p2p",
+            "payment-shop",
+            ]
+      ))
 
 You are done with the most difficult part!
 
@@ -106,13 +107,14 @@ Paste YOUR_TOKEN and run this code:
 
 .. code:: python
 
-      from yoomoney import Client
+      import asyncio
+      from AsyncYoomoney import Client
 
       token = "YOUR_TOKEN"
 
       client = Client(token)
 
-      user = client.account_info()
+      user = asyncio.run(client.account_info())
 
       print("Account number:", user.account)
       print("Account balance:", user.balance)
@@ -122,16 +124,17 @@ Paste YOUR_TOKEN and run this code:
 
       print("Extended balance information:")
       for pair in vars(user.balance_details):
-          print("\t-->", pair, ":", vars(user.balance_details).get(pair))
+      print("\t-->", pair, ":", vars(user.balance_details).get(pair))
 
       print("Information about linked bank cards:")
       cards = user.cards_linked
 
       if len(cards) != 0:
-          for card in cards:
-              print(card.pan_fragment, " - ", card.type)
+      for card in cards:
+            print(card.pan_fragment, " - ", card.type)
       else:
-          print("No card is linked to the account")
+      print("No card is linked to the account")
+
 
 Output:
 *******
@@ -160,28 +163,29 @@ Paste YOUR_TOKEN and run this code:
 
 .. code:: python
 
-      from yoomoney import Client
+      import asyncio
+      from AsyncYoomoney import Client
 
       token = "YOUR_TOKEN"
 
       client = Client(token)
 
-      history = client.operation_history()
+      history = asyncio.run(client.operation_history())
 
       print("List of operations:")
       print("Next page starts with: ", history.next_record)
 
       for operation in history.operations:
-          print()
-          print("Operation:",operation.operation_id)
-          print("\tStatus     -->", operation.status)
-          print("\tDatetime   -->", operation.datetime)
-          print("\tTitle      -->", operation.title)
-          print("\tPattern id -->", operation.pattern_id)
-          print("\tDirection  -->", operation.direction)
-          print("\tAmount     -->", operation.amount)
-          print("\tLabel      -->", operation.label)
-          print("\tType       -->", operation.type)
+      print()
+      print("Operation:",operation.operation_id)
+      print("\tStatus     -->", operation.status)
+      print("\tDatetime   -->", operation.datetime)
+      print("\tTitle      -->", operation.title)
+      print("\tPattern id -->", operation.pattern_id)
+      print("\tDirection  -->", operation.direction)
+      print("\tAmount     -->", operation.amount)
+      print("\tLabel      -->", operation.label)
+      print("\tType       -->", operation.type)
 
 Output:
 *******
@@ -218,20 +222,22 @@ Paste YOUR_TOKEN with an OPERATION_ID (example: 670244335488002312) from previou
 
 .. code:: python
 
-      from yoomoney import Client
+      import asyncio
+      from AsyncYoomoney import Client
 
       token = "YOUR_TOKEN"
 
       client = Client(token)
 
-      details = client.operation_details(operation_id="OPERATION_ID")
+      details = asyncio.run(client.operation_details(operation_id="OPERATION_ID"))
 
       properties = [i for i in details.__dict__.keys() if i[:1] != '_']
 
       max_size = len(max(properties, key=len))
 
       for prop in properties:
-          print(prop, " " * (max_size - len(prop)), "-->", str(details.__getattribute__(prop)).replace('\n', ' '))
+      print(prop, " " * (max_size - len(prop)), "-->", str(details.__getattribute__(prop)).replace('\n', ' '))
+
 
 Output:
 *******
@@ -268,18 +274,20 @@ Run this code:
 
 .. code:: python
 
-      from yoomoney import Quickpay
+      import asyncio
+      from AsyncYoomoney import Quickpay
 
-      quickpay = Quickpay(
-                  receiver="410019014512803",
-                  quickpay_form="shop",
-                  targets="Sponsor this project",
-                  paymentType="SB",
-                  sum=150,
-                  )
+      quickpay = asyncio.run(Quickpay.create(
+            receiver="410019014512803",
+            quickpay_form="shop",
+            targets="Sponsor this project",
+            paymentType="SB",
+            sum=150,
+      ))
 
       print(quickpay.base_url)
       print(quickpay.redirected_url)
+
 
 Output:
 *******

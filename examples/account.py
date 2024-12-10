@@ -1,10 +1,11 @@
-from yoomoney import Client
+import asyncio
+from AsyncYoomoney import Client
 
 token = "YOUR_TOKEN"
 
 client = Client(token)
 
-user = client.account_info()
+user = asyncio.run(client.account_info())
 
 print("Account number:", user.account)
 print("Account balance:", user.balance)

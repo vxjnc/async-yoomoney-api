@@ -17,7 +17,8 @@ from yoomoney.exceptions import (
 
 
 class History:
-    async def __init__(self,
+    @classmethod
+    async def create(cls,
                  base_url: str = None,
                  token: str = None,
                  method: str = None,
@@ -28,9 +29,9 @@ class History:
                  start_record: str = None,
                  records: int = None,
                  details: bool = None,
-                 session: Optional[aiohttp.ClientSession] = None
+                 session: aiohttp.ClientSession = None
                  ):
-
+        self = cls()
         self.__private_method = method
 
         self.__private_base_url = base_url
@@ -149,7 +150,7 @@ class History:
             )
             self.operations.append(operation)
 
-
+        return self
 
     async def _request(self):
 

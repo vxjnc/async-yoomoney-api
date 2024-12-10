@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 import aiohttp
 
 from yoomoney.exceptions import (
@@ -9,13 +9,14 @@ from yoomoney.exceptions import (
 )
 
 class Authorize:
-    async def __init__(
-            self,
+    @classmethod
+    async def create(
+            cls,
             client_id: str,
             redirect_uri: str,
             client_secret: str,
             scope: List[str],
-            session: Optional[aiohttp.ClientSession] = None
+            session: aiohttp.ClientSession = None
                   ):
 
         url = "https://yoomoney.ru/oauth/authorize?client_id={client_id}&response_type=code" \

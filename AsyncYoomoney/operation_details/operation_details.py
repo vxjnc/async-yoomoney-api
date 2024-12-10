@@ -13,13 +13,15 @@ from yoomoney.operation_details.digital_good import DigitalGood
 
 
 class OperationDetails:
-    async def __init__(self,
+    @classmethod
+    async def create(cls,
                  base_url: str,
                  token: str,
                  operation_id: str,
                  method: str = None,
-                 session: Optional[aiohttp.ClientSession] = None
+                 session: aiohttp.ClientSession = None
                  ):
+        self = cls()
         self.__private_method = method
         self.__private_token = token
         self.__private_base_url = base_url
@@ -116,6 +118,8 @@ class OperationDetails:
             self.digital_goods = DigitalGood(products=products,
                                              bonuses=bonuses
                                              )
+
+        return self
 
     async def _request(self):
         access_token = str(self.__private_token)

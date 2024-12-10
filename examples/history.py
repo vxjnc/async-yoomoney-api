@@ -1,10 +1,11 @@
-from yoomoney import Client
+import asyncio
+from AsyncYoomoney import Client
 
 token = "YOUR_TOKEN"
 
 client = Client(token)
 
-history = client.operation_history()
+history = asyncio.run(client.operation_history())
 
 print("List of operations:")
 print("Next page starts with: ", history.next_record)

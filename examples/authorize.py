@@ -1,14 +1,15 @@
-from yoomoney import Authorize
+import asyncio
+from AsyncYoomoney import Authorize
 
-Authorize(
+asyncio.run(Authorize.create(
     client_id="YOUR_CLIENT_ID",
     redirect_uri="YOUR_REDIRECT_URI",
     client_secret="YOUR_CLIENT_SECRET",
     scope=["account-info",
-        "operation-history",
-        "operation-details",
-        "incoming-transfers",
-        "payment-p2p",
-        "payment-shop",
+           "operation-history",
+           "operation-details",
+           "incoming-transfers",
+           "payment-p2p",
+           "payment-shop",
     ]
-)
+))

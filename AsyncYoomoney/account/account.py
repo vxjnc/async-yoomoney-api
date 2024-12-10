@@ -1,6 +1,6 @@
 import aiohttp
 import json
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, List
 
 from yoomoney.account.balance_details import BalanceDetails
 from yoomoney.account.card import Card
@@ -8,13 +8,14 @@ from yoomoney.exceptions import InvalidToken
 
 class Account:
 
-    async def __init__(self,
+    @classmethod
+    async def create(cls,
                  base_url: str = None,
                  token: str = None,
                  method: str = None,
-                 session: Optional[aiohttp.ClientSession] = None
+                 session: aiohttp.ClientSession = None
                  ):
-
+        self = cls()
         self.__private_method = method
 
         self.__private_base_url = base_url
@@ -53,6 +54,8 @@ class Account:
                     self.cards_linked.append(card)
         else:
             raise InvalidToken()
+
+        return self
 
     async def _request(self) -> aiohttp.ClientResponse:
 

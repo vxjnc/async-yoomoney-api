@@ -1,10 +1,11 @@
-from yoomoney import Client
+import asyncio
+from AsyncYoomoney import Client
 
 token = "YOUR_TOKEN"
 
 client = Client(token)
 
-details = client.operation_details(operation_id="OPERATION_ID")
+details = asyncio.run(client.operation_details(operation_id="OPERATION_ID"))
 
 properties = [i for i in details.__dict__.keys() if i[:1] != '_']
 

@@ -1,3 +1,4 @@
+import aiohttp
 import json
 from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Union
 from datetime import datetime
@@ -13,6 +14,7 @@ class Client:
     def __init__(self,
                  token: str = None,
                  base_url: str = None,
+                 session: aiohttp.ClientSession = None
                  ):
 
         if base_url is None:
@@ -21,13 +23,16 @@ class Client:
         if token is not None:
             self.token = token
 
+        self.session = session
+
 
 
     async def account_info(self):
         method = "account-info"
         return await Account.create(base_url=self.base_url,
                                     token=self.token,
-                                    method=method
+                                    method=method,
+                                    session=self.session
                                     )
 
     async def operation_history(self,
@@ -50,6 +55,7 @@ class Client:
                                     start_record=start_record,
                                     records=records,
                                     details=details,
+                                    session=self.session
                                     )
 
     async def operation_details(self,
@@ -60,4 +66,5 @@ class Client:
                                        token=self.token,
                                        method=method,
                                        operation_id=operation_id,
+                                       session=self.session
                                        )
